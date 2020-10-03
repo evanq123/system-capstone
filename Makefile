@@ -4,7 +4,7 @@ run:
 	docker build \
 		-t meks/system-capstone:system-project \
 		-f Dockerfile.app .
-	docker run -it --rm \
+	docker run -it --rm --privileged  \
 		--name app meks/system-capstone:system-project \
 		bash
 
@@ -14,7 +14,7 @@ benchmark:
 	docker build \
 		-t meks/system-capstone:system-project \
 		-f Dockerfile.app .
-	docker run -it --rm \
+	docker run -it --rm --privileged  \
 		--name app meks/system-capstone:system-project \
 		./scripts/benchmark.sh
 	
@@ -24,7 +24,7 @@ test:
 	docker build \
 		-t meks/system-capstone:system-project \
 		-f Dockerfile.app .
-	docker run -it --rm \
+	docker run -it --rm --privileged  \
 		--name app meks/system-capstone:system-project \
 		./scripts/test.sh
 
