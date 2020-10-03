@@ -17,4 +17,5 @@ To run tests locally before pushing, run `make test` on macOS or Linux, or run e
 
 ### Deployment Instructions
 1. `make sql` and `make redis` to start the databases.
+
 2. `make run` to start a shell instance. `make benchmark` to run benchmark suite.
