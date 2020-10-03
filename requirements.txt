@@ -1,0 +1,4 @@
+pyyaml
+parse
+coverage==4.0.3
+python-coveralls

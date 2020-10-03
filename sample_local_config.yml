@@ -1,0 +1,8 @@
+# Copy file as `.local_config.yaml` and fill out API keys/secrets
+
+# TwitterAPI
+twitter:
+    consumer_key : ""
+    consumer_secret : ""
+    access_token_key : ""
+    access_token_secret: ""
