@@ -1,5 +1,5 @@
 # Dockerfile for app image
-FROM centos/python-36-centos8:latest
+FROM centos/python-36-centos7
 
 RUN pip3 install -r requirements.txt
 
