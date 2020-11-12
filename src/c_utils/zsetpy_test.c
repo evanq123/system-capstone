@@ -41,7 +41,7 @@ int zsetpy_add(double score, char *puid, double newscore)
 unsigned long zsetpy_length()
 {
     puts("Called zset_length");
-    return -1;
+    return 1;
     // return zset_length(zset);
 }
 

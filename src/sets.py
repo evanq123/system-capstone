@@ -137,6 +137,7 @@ class ZSet(SortedSet):
 
     def remove(self, item):
         # TODO Needed to create buffer for item, possible issue may arise?
+        # esp. with non null characters in string buffer.
         item_arr = create_string_buffer(item.encode(), len(item))
         # print(repr(item_arr.raw))
         return self._zset.zsetpy_delete(item_arr)
@@ -148,7 +149,15 @@ class ZSet(SortedSet):
         return self._zset.zsetpy_add(score, item_arr, score)
 
     def subset(self, start, end, include_start=True, include_end=True):
-        return self._zset.zsetpy_range(start, end, include_start, include_end)
+        # pointer of bytes
+        ptrs = self._zset.zsetpy_range(start, end, include_start, include_end)
+        res = []
+        for b in ptrs:
+            if b is None:
+                break
+            res.append(b.decode())
+
+        return res
     
     def size(self):
         return self._zset.zsetpy_length()
