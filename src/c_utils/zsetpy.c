@@ -1,5 +1,7 @@
 #include "zset.h"
 
+#include <string.h>
+
 static ZSet * zset;
 
 void zsetpy_init(void)
