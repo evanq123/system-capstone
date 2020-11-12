@@ -65,7 +65,7 @@ class MySQLDB:
     def _drop_table(self, table):
         self.conn.cursor().execute("DROP TABLE " + table)
 
-    @benchmark_function
+    @benchmark_function("mysql")
     def create(self, data):
         date = datetime.datetime.strptime(data["created_at"], "%a %b %d %H:%M:%S %z %Y")
         query = "INSERT INTO {} (created_at, id, text, source) VALUES (%s, %s, %s, %s)".format(self.table)
@@ -79,7 +79,7 @@ class MySQLDB:
             print(e)
             pass # TODO write to file
 
-    @benchmark_function
+    @benchmark_function("mysql")
     def read(self, uid, column):
         query = "SELECT " + column + " FROM {} WHERE mysql_id = ".format(self.table) + uid
 
@@ -92,7 +92,7 @@ class MySQLDB:
             print(e)
             pass # TODO write to logger
     
-    @benchmark_function
+    @benchmark_function("mysql")
     def delete(self, uid):
         query = "DELETE FROM {} WHERE mysql_id = {}".format(self.table, uid)
 
@@ -107,7 +107,7 @@ class MySQLDB:
             print(e)
             pass # TODO write to logger
             
-    @benchmark_function
+    @benchmark_function("mysql")
     def get_range(self, comparator, column, start, end):
 
         startDate = datetime.datetime.strptime(start, "%a %b %d %H:%M:%S %z %Y")
@@ -131,23 +131,23 @@ class KVStore:
         # TODO store into ZSet
         self.sets = defaultdict(SList)
 
-    @benchmark_function
+    @benchmark_function("kvstore")
     def get(self, key):
         return self.store.get(key)
 
-    @benchmark_function
+    @benchmark_function("kvstore")
     def put(self, key, value):
         self.store[key] = value
 
-    @benchmark_function
+    @benchmark_function("kvstore")
     def delete(self, key):
         return self.store.pop(key)
 
-    @benchmark_function
+    @benchmark_function("kvstore")
     def zdelete(self, data_type, uid):
         return self.sets[data_type].remove(uid)
 
-    @benchmark_function
+    @benchmark_function("kvstore")
     def zput(self, data_type, uid, score):
         """ 
         Insert into sorted set for range query optimizations
@@ -157,7 +157,7 @@ class KVStore:
         """
         self.sets[data_type].add(uid, score)
 
-    @benchmark_function
+    @benchmark_function("kvstore")
     def zrange(self, comparator, data_type, start, end):
         uids = self.sets[comparator].subset(start, end)
         results = []
