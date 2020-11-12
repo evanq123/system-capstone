@@ -36,5 +36,5 @@ def benchmark_print_results():
         tot_time = sum(times)
         max_time = max(times)
         min_time = min(times)
-        results += "{:15}: #calls:{:10} tot_time:{:20} avg_time:{:.17f} max_time:{:.17f} min_time:{:.17f}\n".format(func_name, passes, tot_time, avg_time, max_time, min_time)
+        results += "{:15}: #calls:{:10} tot_time:{:20.9f} avg_time:{:.9f} max_time:{:.9f} min_time:{:.9f}\n".format(func_name, passes, tot_time, avg_time, max_time, min_time)
     return results
