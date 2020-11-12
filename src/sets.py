@@ -37,6 +37,7 @@ class SList(SortedSet):
         return False
 
     def add(self, item, score):
+        # print(item, score)
         self._set.append((int(score), item))
 
     def subset(self, start, end):
@@ -46,6 +47,7 @@ class SList(SortedSet):
             score, item = elem
             if score >= start and score <= end:
                 res.append(item)
+        return res
 
     def __iter__(self):
         return self._set.__iter__()

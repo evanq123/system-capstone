@@ -31,7 +31,7 @@ class MySQLDB:
         
         self.conn = mysql.connector.connect(host='localhost',
                                            user='root',
-                                           password='RCK3985125',
+                                           password='password',
                                            database='mydatabase')
         if self.conn.is_connected():
             print('Connected to MySQL database')
@@ -45,7 +45,7 @@ class MySQLDB:
     def _create_database(self):
         conn =  mysql.connector.connect(host='localhost',
                                            user='root',
-                                           password='RCK3985125',
+                                           password='password',
                                         database='mydatabase')
         mycursor = conn.cursor()
         #mycursor.execute("CREATE DATABASE mydatabase")
@@ -54,7 +54,7 @@ class MySQLDB:
     def drop_table(self, table):
         conn =  mysql.connector.connect(host='localhost',
                                            user='root',
-                                           password='RCK3985125',
+                                           password='password',
                                         database='mydatabase')
         mycursor = conn.cursor()
         sql = "DROP TABLE " + table
@@ -67,31 +67,32 @@ class MySQLDB:
 
         args = (date.strftime('%Y-%m-%d %H:%M:%S'), data["id_str"], data['text'], data['source'])
 
-        print("----------------------------------------------")
-        print("Add ID:", data["id_str"])
+        # print("----------------------------------------------")
+        # print("Add ID:", data["id_str"])
         try:
             self.mycursor.execute(query, args)
 
             self.conn.commit()
-            print(self.mycursor.lastrowid, "record inserted.")
+            # print(self.mycursor.lastrowid, "record inserted.")
 
         except Error as error:
-            print(error)
+            pass # TODO write to file
+            # print(error)
 
     
     def read(self, uid, column):
 
         query = "SELECT " + column + " FROM twitter_data WHERE mysql_id = " + uid
 
-        print("----------------------------------------------")
-        print("Read ID: ", uid)
+        # print("----------------------------------------------")
+        # print("Read ID: ", uid)
 
         try:
             self.mycursor.execute(query)
 
             myresult = str(self.mycursor.fetchone())
             result = myresult[1:len(myresult)-2]
-            print(column + ": " + result)
+            # print(column + ": " + result)
             return result
 
         except Error as error:
@@ -122,8 +123,8 @@ class MySQLDB:
 
         query = "SELECT " + column + " FROM twitter_data WHERE {} between ".format(comparator) + "\"" + startDate.strftime('%Y-%m-%d %H:%M:%S') + "\"" + " and " + "\"" + endDate.strftime('%Y-%m-%d %H:%M:%S') + "\""
 
-        print("----------------------------------------------")
-        print("Get Range Between " + start + " - " + end)
+        # print("----------------------------------------------")
+        # print("Get Range Between " + start + " - " + end)
         try:
             self.mycursor.execute(query)
 
@@ -169,7 +170,6 @@ class KVStore:
         results = []
         if ids is None:
             return []
-        print(ids)
         for x in ids:
             # get datatype of id
             results.append(self.get("{}:{}".format(x, data_type)))
@@ -188,10 +188,10 @@ def db_create(data, score_conv):
     i.e., 'created_at': def score_created_at()
     """
     #db_mysql.__init__()
-    print(data["created_at"])
+    # print(data["created_at"])
     db_mysql.create(data)
 
-    start = time.time()
+    # start = time.time()
     # Insert field names and sorted fields into KVStore:
     db_kvstore.put(str(data['id']) + ":db_field_names", data.keys())
     db_kvstore.put(str(data['id']) + ":db_sorted_field_names", score_conv.keys())
@@ -203,17 +203,17 @@ def db_create(data, score_conv):
             db_kvstore.zput(str(field_name), str(data['id']), score)
 
         db_kvstore.put(str(data['id']) + ":" + str(field_name), value)
-    end = time.time()
-    print("create time: ", end - start)
+    # end = time.time()
+    # print("create time: ", end - start)
 
 def db_read(uid, field_name):
     db_data = db_mysql.read(str(uid), str(field_name))
 
-    start = time.time()
+    # start = time.time()
     uid = str(uid)
     kv_data = db_kvstore.get(uid + ":" + field_name)
-    end = time.time()
-    print("read time: ", end - start)
+    # end = time.time()
+    # print("read time: ", end - start)
 
     return db_data, kv_data
 
