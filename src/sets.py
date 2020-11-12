@@ -1,16 +1,16 @@
 from ctypes import *
-from abc import ABC
+from abc import ABC, abstractmethod
 
 class SortedSet(ABC):
-
+    @abstractmethod
     def remove(self, item):
         pass
-
-
+    
+    @abstractmethod
     def add(self, item):
         pass
-
-
+    
+    @abstractmethod
     def subset(self, start, end):
         pass
 
