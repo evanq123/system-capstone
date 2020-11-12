@@ -54,7 +54,7 @@ def menu():
         yearTemp = str(temp.split(" ", 3)[2])
         day = str(temp.split(" ", 1)[0])
 
-        temp = str(startInput.split(", ")[1])
+        temp = str(endInput.split(", ")[1])
         hour = str(temp.split(":")[0])
         minute = str(temp.split(":")[1])
         sec = str(temp.split(":")[2])
@@ -62,15 +62,14 @@ def menu():
         # print(endRange)
         # -----------------------------------------------------------------------------------------------
 
-        db_data, kv_data = db_range('created_at', 'text', "Wed Nov 11 23:20:10 +0000 2020", "Wed Nov 11 23:20:12 +0000 2020")
-        print(startRange, endRange)
-        # db_data, kv_data = db_range('created_at', 'text', startRange, endRange)
-        #11 11 2020, 22:33pm
+        # db_data, kv_data = db_range('created_at', 'text', "Wed Nov 11 23:20:10 +0000 2020", "Wed Nov 11 23:20:12 +0000 2020")
+        # print(startRange, endRange)
+        db_data, kv_data = db_range('created_at', 'text', startRange, endRange)
         print('Tweets obtained from MySQL')
         for text in db_data:
             print(text)
 
-        print('Tweets ontaomed from KVStore')
+        print('Tweets obtained from KVStore')
         for text in kv_data:
             print(text)
 
