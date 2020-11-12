@@ -2,7 +2,7 @@ import time
 from statistics import mean
 from collections import defaultdict
 
-BENCHMARK_RESULTS = defaultdict(list)
+benchmark_results = defaultdict(list)
 
 def benchmark_function(func):
     """
@@ -13,21 +13,21 @@ def benchmark_function(func):
         """
         A nested function for timing other functions
         """
-        global BENCHMARK_RESULTS
-        times = BENCHMARK_RESULTS[func.__name__]
+        global benchmark_results
+        times = benchmark_results[func.__name__]
         start = time.time()
         value = func(*args, **kwargs)
         end = time.time()
         runtime = end - start
         times.append(runtime)
-        BENCHMARK_RESULTS.update({func.__name__:times})
+        benchmark_results.update({func.__name__:times})
         return value
     return function_timer
 
 
-def benchmark_get_results():
+def benchmark_print_results():
     results = "Benchmarking results: \n"
-    for func_name, times in BENCHMARK_RESULTS.items():
+    for func_name, times in benchmark_results.items():
         passes = len(times)
         avg_time = mean(times)
         tot_time = sum(times)

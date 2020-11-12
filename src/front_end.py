@@ -68,7 +68,7 @@ def menu():
                 f.write(text)
             f.close()
         elif val == 2:
-            print(benchmark_get_results())
+            print(benchmark_print_results())
         elif val == 3:
             print("Exiting...\n")
             return
