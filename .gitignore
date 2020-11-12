@@ -4,6 +4,8 @@ config.json
 .idea/
 .vscode/
 data_*.txt
+*_mysql.txt
+*_kv.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
