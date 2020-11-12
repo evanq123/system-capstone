@@ -1,6 +1,6 @@
 from database import db_mysql, db_create, db_delete, db_range, db_kvstore
 from datetime import datetime
-from benchmark import benchmark_get_results
+from benchmark import benchmark_print_results
 import time
 import json
 
