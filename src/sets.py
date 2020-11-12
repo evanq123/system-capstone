@@ -1,8 +1,10 @@
 from ctypes import *
 from abc import ABC, abstractmethod
 
+import os
 import bisect
-
+#--------------------------------------------------------------------------------------------------
+# SORTED SET Interface
 class SortedSet(ABC):
     @abstractmethod
     def remove(self, item):
@@ -20,10 +22,10 @@ class SortedSet(ABC):
         pass
 
     def __str__(self):
-        return self._set.__str__()
+        pass
 
     def __repr__(self):
-        return self._set.__repr__()
+        pass
 
 class SListItem():
     def __init__(self, item, score):
@@ -33,8 +35,11 @@ class SListItem():
     def __lt__(self, other):
         return self.score < other.score
 
+
+#--------------------------------------------------------------------------------------------------
+# SORTED LIST
 class SList(SortedSet):
-    # Simple list Used for prototype.
+    # Simple multiset datastructure used for prototype.
     def __init__(self):
         self._set = list()
 
@@ -76,6 +81,17 @@ class SList(SortedSet):
     def __repr__(self):
         return self._set.__repr__()
 
+
+#--------------------------------------------------------------------------------------------------
+# ZSET 
+class ZSetIterator:
+    def __init__(self, zset):
+        self._zset = zset
+
+    def __next__(self):
+        # TODO generate next elem.
+        pass
+
 class ZSet(SortedSet):
     # TODO shared object should be able to load multiple times.
     # We can temporarily instantiate as many zsets as we need
@@ -83,8 +99,10 @@ class ZSet(SortedSet):
     # https://bit.ly/2JnVxaQ
     def __init__(self, zset_so_filename="zsetpy.so"):
         # TODO compile zsetpy.c -> zset_so_filename.so
-        cdll.LoadLibrary(zset_so_filename)
-        self._zset = CDLL(zset_so_filename)
+        # For now, assume zsetpy.so and copy filename
+        os.system("cp zsetpy.so {}".format(zset_so_filename))
+        
+        self._zset = CDLL(os.path.abspath(zset_so_filename))
         self._so_filename = zset_so_filename
         self._init_zset_functions()
         self._zset.zsetpy_init()
@@ -119,26 +137,18 @@ class ZSet(SortedSet):
         self._zset.zsetpy_range.argtypes = [c_double, c_double, c_bool, c_bool]
 
     def remove(self, item):
-        return self._zset.zsetpy_delete(item)
+        return self._zset.zsetpy_delete(item.encode())
 
     def add(self, item, score, newscore=None):
         if newscore is not None:
-            return self._zset.zsetpy_add(score, item, newscore)
-        return self._zset.zsetpy_add(score, item, score)
+            return self._zset.zsetpy_add(score, item.encode(), newscore)
+        return self._zset.zsetpy_add(score, item.encode(), score)
 
     def subset(self, start, end, include_start=True, include_end=True):
         return self._zset.zsetpy_range(start, end, include_start, include_end)
     
     def size(self):
         return self._zset.zsetpy_length()
-
-    class ZSetIterator:
-        def __init__(self, zset):
-            self._zset = zset
-
-        def __next__(self):
-            # TODO generate next elem.
-            pass
 
     def __iter__(self):
         return ZSetIterator(self._zset)
