@@ -12,7 +12,6 @@ def main():
     #------------------------Building the store-----------------------------------------
     print("building databases...\n")
     while line:
-        print(line)
         db_create(json.loads(line))
         line = f.readline()
     end = time.time()
