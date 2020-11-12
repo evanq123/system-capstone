@@ -98,7 +98,6 @@ class ZSet(SortedSet):
     # by compiling the .so under different names.
     # https://bit.ly/2JnVxaQ
     def __init__(self, zset_so_filename="zsetpy.so"):
-        # TODO compile zsetpy.c -> zset_so_filename.so
         # For now, assume zsetpy.so and copy filename
         os.system("cp zsetpy.so {}".format(zset_so_filename))
         
@@ -137,12 +136,16 @@ class ZSet(SortedSet):
         self._zset.zsetpy_range.argtypes = [c_double, c_double, c_bool, c_bool]
 
     def remove(self, item):
-        return self._zset.zsetpy_delete(item.encode())
+        # TODO Needed to create buffer for item, possible issue may arise?
+        item_arr = create_string_buffer(item.encode(), len(item))
+        # print(repr(item_arr.raw))
+        return self._zset.zsetpy_delete(item_arr)
 
     def add(self, item, score, newscore=None):
+        item_arr = create_string_buffer(item.encode(), len(item))
         if newscore is not None:
-            return self._zset.zsetpy_add(score, item.encode(), newscore)
-        return self._zset.zsetpy_add(score, item.encode(), score)
+            return self._zset.zsetpy_add(score, item_arr, newscore)
+        return self._zset.zsetpy_add(score, item_arr, score)
 
     def subset(self, start, end, include_start=True, include_end=True):
         return self._zset.zsetpy_range(start, end, include_start, include_end)

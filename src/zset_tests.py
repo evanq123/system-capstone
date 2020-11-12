@@ -11,7 +11,7 @@ zset.remove("persist 1")
 zset2.remove("persist 2")
 
 print("\nTesting 1 zset")
-
+# TODO, since 
 zset.remove("test_remove")
 zset.add("test_add", 0)
 zset.add("test_add2", 0, 1)
