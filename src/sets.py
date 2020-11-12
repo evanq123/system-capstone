@@ -1,6 +1,8 @@
 from ctypes import *
 from abc import ABC, abstractmethod
 
+import bisect
+
 class SortedSet(ABC):
     @abstractmethod
     def remove(self, item):
@@ -23,6 +25,14 @@ class SortedSet(ABC):
     def __repr__(self):
         return self._set.__repr__()
 
+class SListItem():
+    def __init__(self, item, score):
+        self.item = item
+        self.score = score
+
+    def __lt__(self, other):
+        return self.score < other.score
+
 class SList(SortedSet):
     # Simple list Used for prototype.
     def __init__(self):
@@ -38,15 +48,23 @@ class SList(SortedSet):
 
     def add(self, item, score):
         # print(item, score)
-        self._set.append((int(score), item))
+        # self._set.append((int(score), item))
+        # O(n) insertion because python's list is slow:
+        # https://wiki.python.org/moin/TimeComplexity
+        bisect.insort(self._set, SListItem(item, score))
 
     def subset(self, start, end):
-        # O(n)
         res = list()
-        for elem in self._set:
-            score, item = elem
-            if score >= start and score <= end:
-                res.append(item)
+        # O(n)
+        # for elem in self._set:
+        #     if elem.score >= start and elem.score <= end:
+        #         res.append(elem.item)
+
+        #O(2log(n) + M), M = # of matches
+        left_index = bisect.bisect_left(self._set, SListItem('temp_min', start))
+        right_index = bisect.bisect_right(self._set, SListItem('temp_max', end))
+        for i in range(left_index, right_index):
+            res.append(self._set[i].item)
         return res
 
     def __iter__(self):
