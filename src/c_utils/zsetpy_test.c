@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 // static ZSet * zset;
 
@@ -18,15 +19,20 @@ void zsetpy_init(void)
     // zset = zset_new();
 }
 
-int zsetpy_score(char *uid, double score) 
+int zsetpy_score(char *puid, double score) 
 {
+    char * uid = malloc(sizeof(char) * strlen(puid));
+    uid = strcpy(uid, puid);
+
     printf("Called zset_score with %s, %f\n", uid, score);
     return -1;
     // return zset_score(zset, uid, &score);
 }
 
-int zsetpy_add(double score, char *uid, double newscore)
+int zsetpy_add(double score, char *puid, double newscore)
 {
+    char * uid = malloc(sizeof(char) * strlen(puid));
+    uid = strcpy(uid, puid);
     printf("Called zset_add with %f, %s, %f\n", score, uid, newscore);
     return -1;
     // return zset_add(zset, score, uid, &newscore);
@@ -39,15 +45,21 @@ unsigned long zsetpy_length()
     // return zset_length(zset);
 }
 
-int zsetpy_rank(char * uid, bool reverse){
+int zsetpy_rank(char * puid, bool reverse){
+    char * uid = malloc(sizeof(char) * strlen(puid));
+    uid = strcpy(uid, puid);
+
     printf("Called zset_rank with %s, %s\n", uid, reverse ? "true" : "false");
     return -1;
     // return zset_rank(zset, uid, reverse);
 }
 
 
-char * persist = "original";
-int zsetpy_delete(char* uid) {
+char * persist = "initial_string";
+int zsetpy_delete(char* puid) {
+    char * uid = malloc(sizeof(char) * strlen(puid));
+    uid = strcpy(uid, puid);
+
     printf("Called zset_delete with %s\n", uid);
     
     printf("Checking persistance:%s\n", persist);
