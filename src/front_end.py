@@ -1,5 +1,6 @@
 from database import db_mysql, db_create, db_delete, db_range, db_kvstore
 from datetime import datetime
+from benchmark import benchmark_get_results
 import time
 import json
 
@@ -43,7 +44,8 @@ def menu():
     try:
         print("Select function: ")
         print("1) Range")
-        print("2) Exit")
+        print("2) Display benchmarks")
+        print("3) Exit")
         val = input()
         val = int(val)
         if val == 1:
@@ -65,8 +67,9 @@ def menu():
             for text in kv_data:
                 f.write(text)
             f.close()
-
         elif val == 2:
+            print(benchmark_get_results())
+        elif val == 3:
             print("Exiting...\n")
             return
     except Error as e:

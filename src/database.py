@@ -4,8 +4,8 @@ from dateutil import parser
 import mysql.connector
 import datetime
 from mysql.connector import Error
-import time
 from range_conversions import score_conv
+from benchmark import benchmark_function
 
 import json
 
@@ -65,6 +65,7 @@ class MySQLDB:
     def _drop_table(self, table):
         self.conn.cursor().execute("DROP TABLE " + table)
 
+    @benchmark_function
     def create(self, data):
         date = datetime.datetime.strptime(data["created_at"], "%a %b %d %H:%M:%S %z %Y")
         query = "INSERT INTO {} (created_at, id, text, source) VALUES (%s, %s, %s, %s)".format(self.table)
@@ -77,7 +78,8 @@ class MySQLDB:
         except Error as e:
             print(e)
             pass # TODO write to file
-            
+
+    @benchmark_function
     def read(self, uid, column):
         query = "SELECT " + column + " FROM {} WHERE mysql_id = ".format(self.table) + uid
 
@@ -89,7 +91,8 @@ class MySQLDB:
         except Error as e:
             print(e)
             pass # TODO write to logger
-
+    
+    @benchmark_function
     def delete(self, uid):
         query = "DELETE FROM {} WHERE mysql_id = {}".format(self.table, uid)
 
@@ -104,7 +107,7 @@ class MySQLDB:
             print(e)
             pass # TODO write to logger
             
-
+    @benchmark_function
     def get_range(self, comparator, column, start, end):
 
         startDate = datetime.datetime.strptime(start, "%a %b %d %H:%M:%S %z %Y")
@@ -128,18 +131,23 @@ class KVStore:
         # TODO store into ZSet
         self.sets = defaultdict(SList)
 
+    @benchmark_function
     def get(self, key):
         return self.store.get(key)
 
+    @benchmark_function
     def put(self, key, value):
         self.store[key] = value
 
+    @benchmark_function
     def delete(self, key):
         return self.store.pop(key)
 
+    @benchmark_function
     def zdelete(self, data_type, uid):
         return self.sets[data_type].remove(uid)
 
+    @benchmark_function
     def zput(self, data_type, uid, score):
         """ 
         Insert into sorted set for range query optimizations
@@ -149,6 +157,7 @@ class KVStore:
         """
         self.sets[data_type].add(uid, score)
 
+    @benchmark_function
     def zrange(self, comparator, data_type, start, end):
         uids = self.sets[comparator].subset(start, end)
         results = []
@@ -167,6 +176,7 @@ db_mysql = MySQLDB(
 
 #--------------------------------------------------------------------------------------------------
 # basic operations
+# @benchmark_function
 def db_create(data):
     db_mysql.create(data)
 
@@ -184,6 +194,7 @@ def db_create(data):
 
         db_kvstore.put(str(data['id']) + ":" + str(field_name), value)
 
+# @benchmark_function
 def db_read(uid, field_name):
     db_data = db_mysql.read(str(uid), str(field_name))
 
@@ -192,6 +203,7 @@ def db_read(uid, field_name):
 
     return db_data, kv_data
 
+# @benchmark_function
 def db_delete(uid):
     db_mysql.delete(str(uid))
 
@@ -203,16 +215,11 @@ def db_delete(uid):
             db_kvstore.zdelete(field, uid)
         db_kvstore.delete(uid + ":" + field)
 
+# @benchmark_function
 def db_range(comparator, data_type, start, end):
-    mysql_start = time.time()
     db_data = db_mysql.get_range(comparator, data_type, start, end)
-    mysql_end = time.time()
-    print("mysql range time: ", mysql_end - mysql_start)
-    kv_start = time.time()
     kv_data = db_kvstore.zrange(comparator, data_type,
                                 score_conv[comparator](start),
                                 score_conv[comparator](end))
-    kv_end = time.time()
-    print("kvtime range time: ", kv_end - mysql_start)
     
     return db_data, kv_data
