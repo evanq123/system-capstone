@@ -5,8 +5,6 @@ import time
 import json
 
 def main():
-    # print("Enter data file name to be read:")
-    # f = open(input(), "r")
     f = open("data_6k.txt", "r")
     line = f.readline()
     #------------------------Building the 6k store-----------------------------------------
@@ -83,11 +81,11 @@ def main():
     for text in db_data:
         f.write(text[0])
     f.close()
-    print("Range + create for 100k")
     f = open("range_result_100_kv.txt", "w")
     for text in kv_data:
         f.write(text)
     f.close()
+    print("Range + create for 100k")
     print(benchmark_print_results())
 
 if __name__ == "__main__":

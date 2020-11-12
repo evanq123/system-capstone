@@ -28,7 +28,7 @@ def benchmark_function(param):
     return benchmark
 
 def benchmark_clear_results():
-    benchmark_results = defaultdict(list)
+    benchmark_results.clear()
 
 def benchmark_print_results():
     results = "Benchmarking results: \n"
