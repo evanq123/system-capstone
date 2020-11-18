@@ -222,7 +222,7 @@ bool skip_list_value_gte_min(double value, rangespec *range) {
 
 /** Checks that this value is less than (or equal to) maximum **/
 bool skip_list_value_lte_max(double value, rangespec *range) {
-    return range->maxex ? (value < range->max) : (value <= range->max)
+    return range->maxex ? (value < range->max) : (value <= range->max);
 }
 
 /** checks if range spec is apart of this skip list **/
