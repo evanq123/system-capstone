@@ -39,14 +39,14 @@ SkipList * skip_list_new(void);
 void skip_list_free(SkipList * sl);
 
 SkipListNode * skip_list_insert(SkipList *sl, double score, char *uid);
-int skip_list_delete(SkipList *sl, double score, char *uid, SkipListNode **node);
+bool skip_list_delete(SkipList *sl, double score, char *uid, SkipListNode **node);
 
 SkipListNode * skip_list_first_in_range(SkipList *sl, rangespec *range);
-SkipListNode * skip_list_last_in_range(SkipList *sl, rangespec *range);
+// SkipListNode * skip_list_last_in_range(SkipList *sl, rangespec *range);
 
-unsigned long skip_list_get_rank(SkipList *sl, double score, char *o);
+// unsigned long skip_list_get_rank(SkipList *sl, double score, char *o);
 
-int skip_list_value_gte_min(double value, rangespec *spec);
-int skip_list_value_gte_max(double value, rangespec *spec);
+bool skip_list_value_gte_min(double value, rangespec *spec);
+bool skip_list_value_lte_max(double value, rangespec *spec);
 
 #endif
