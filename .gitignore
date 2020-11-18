@@ -1,10 +1,21 @@
+# Custom
+config.ini
+config.json
+.idea/
+.vscode/
+data_*.txt
+*_mysql.txt
+*_kv.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 
+
 # C extensions
 *.so
+*.o
 
 # Distribution / packaging
 .Python

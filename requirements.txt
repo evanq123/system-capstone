@@ -2,3 +2,6 @@ pyyaml
 parse
 coverage==4.0.3
 python-coveralls
+mysql
+mysql-connector-python
+tweepy
