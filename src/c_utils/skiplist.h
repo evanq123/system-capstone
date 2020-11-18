@@ -1,7 +1,7 @@
 #ifndef __SKIPLIST_H
 #define __SKIPLIST_H
 
-#include <collectc/list.h>
+// #include <collectc/list.h>
 
 #include <stdbool.h>
 #include <stdlib.h>
