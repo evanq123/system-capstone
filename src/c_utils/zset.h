@@ -15,10 +15,10 @@ typedef struct ZSet {
 
 ZSet * zset_new(void);
 unsigned long zset_length(ZSet *zs);
-int zset_score(ZSet *sz, char *uid, double *score);
-int zset_add(ZSet *zs, double score, char *uid, double *newscore);
-long zset_rank(ZSet *zs, char *uid, bool reverse);
-int zset_delete(ZSet *zs, char *uid);
+// int zset_score(ZSet *zs, char *uid, double *score);
+bool zset_add(ZSet *zs, double score, char *uid, double *newscore);
+// long zset_rank(ZSet *zs, char *uid, bool reverse);
+bool zset_delete(ZSet *zs, char *uid);
 char ** zset_range(ZSet *zs, rangespec *range);
 
 #endif

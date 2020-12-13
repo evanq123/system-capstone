@@ -28,3 +28,39 @@
 
 /* For our case, we do not need to do c) and for a) we can point to list
  * for duplicate scores */
+
+#include "zset.h"
+
+ZSet * zset_new(void) {
+    ZSet * zs = malloc(sizeof(*zs));
+    zs->sl = skip_list_new();
+    enum cc_stat status = hashtable_new(zs->map);
+    if (status != CC_OK) {
+        skip_list_free(zs->sl);
+        free(zs);
+        return NULL;
+    }
+    
+    return zs;
+}
+
+unsigned long zset_length(ZSet *zs) {
+    return zs->sl->size;
+} 
+
+bool zset_delete(ZSet *zs, char *uid) {
+    double score;
+    enum cc_stat status = hashtable_remove(zs->map, uid, &score);
+    if (status == CC_OK) {
+        bool slretval = skip_list_delete(zs->sl, score, uid, NULL);
+        // Possible error: found in hashmap but not in skiplist.
+        // TODO Log this?
+        return true;
+    }
+    return false;
+}
+
+zset_add(ZSet *zs, double score, char *uid, double *newscore) {
+
+}
+

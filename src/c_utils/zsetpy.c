@@ -9,12 +9,12 @@ void zsetpy_init(void)
     zset = zset_new();
 }
 
-int zsetpy_score(char *puid, double score) 
-{
-    char * uid = malloc(sizeof(char) * strlen(puid));
-    uid = strcpy(uid, puid);
-    return zset_score(zset, uid, &score);
-}
+// int zsetpy_score(char *puid, double score) 
+// {
+//     char * uid = malloc(sizeof(char) * strlen(puid));
+//     uid = strcpy(uid, puid);
+//     return zset_score(zset, uid, &score);
+// }
 
 int zsetpy_add(double score, char *puid, double newscore)
 {
@@ -28,11 +28,11 @@ unsigned long zsetpy_length()
     return zset_length(zset);
 }
 
-int zsetpy_rank(char * puid, bool reverse){
-    char * uid = malloc(sizeof(char) * strlen(puid));
-    uid = strcpy(uid, puid);
-    return zset_rank(zset, uid, reverse);
-}
+// int zsetpy_rank(char * puid, bool reverse){
+//     char * uid = malloc(sizeof(char) * strlen(puid));
+//     uid = strcpy(uid, puid);
+//     return zset_rank(zset, uid, reverse);
+// }
 
 int zsetpy_delete(char* puid) {
     char * uid = malloc(sizeof(char) * strlen(puid));

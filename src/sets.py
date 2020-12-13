@@ -112,8 +112,8 @@ class ZSet(SortedSet):
         self._zset.zsetpy_init.argtypes = None
 
         #zset_score
-        self._zset.zsetpy_score.restype = c_int
-        self._zset.zsetpy_score.argtypes = [c_char_p, c_double]
+        # self._zset.zsetpy_score.restype = c_int
+        # self._zset.zsetpy_score.argtypes = [c_char_p, c_double]
 
         #zset_add
         self._zset.zsetpy_add.restype = c_int
@@ -124,10 +124,10 @@ class ZSet(SortedSet):
         self._zset.zsetpy_length.argtypes = None
 
         #zset_rank
-        self._zset.zsetpy_rank.restype = c_int
-        self._zset.zsetpy_rank.argtypes = [c_char_p, c_bool]
+        # self._zset.zsetpy_rank.restype = c_int
+        # self._zset.zsetpy_rank.argtypes = [c_char_p, c_bool]
 
-        #zset_length
+        #zset_delete
         self._zset.zsetpy_delete.restype = c_int
         self._zset.zsetpy_delete.argtypes = [c_char_p]
 
