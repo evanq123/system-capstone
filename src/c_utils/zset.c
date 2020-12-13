@@ -75,5 +75,28 @@ bool zset_add(ZSet *zs, double score, char *uid) {
 }
 
 char ** zset_range(ZSet *zs, rangespec *range) {
+    Array * results;
+    enum cc_stat status = array_new(&results);
+    if (status != CC_OK) {
+        // result array could not be created.
+        // TODO log this.
+        return NULL;
+    }
+    // Get the node thats first in range.
+    SkipListNode * ln = skip_list_first_in_range(zs->sl, range);
+    if (ln == NULL) 
+        // empty array
+        return array_get_buffer(results);
 
+    while(ln) {
+        // If this node is not lte max, it is out of range.
+        if (!skip_list_value_lte_max(ln->score, range)) break;
+        array_add(results, ln->uid);
+        ln = ln->level[0].forward; // forward == null if no more elems.
+    }
+
+    char ** retval = array_get_buffer(results);
+    // TODO possibly need to trim length of retval
+
+    return retval;
 }
