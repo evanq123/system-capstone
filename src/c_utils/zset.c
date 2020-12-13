@@ -65,6 +65,7 @@ bool zset_add(ZSet *zs, double score, char *uid) {
         // uid are unique.
         return false;
     
+    // map uid -> score
     enum cc_stat status = hashtable_add(zs->map, uid, score);
     if (status != CC_OK)
         // could not add to hashmap
@@ -73,3 +74,6 @@ bool zset_add(ZSet *zs, double score, char *uid) {
     return skip_list_insert(zs->sl, score, uid);
 }
 
+char ** zset_range(ZSet *zs, rangespec *range) {
+
+}

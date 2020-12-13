@@ -30,7 +30,7 @@ typedef struct SkipList {
     int level;
 } SkipList;
 
-typedef struct {
+typedef struct rangespec{
     double min, max;
     bool minex, maxex; /* are min or max exclusive? */
 } rangespec;
