@@ -16,11 +16,11 @@ void zsetpy_init(void)
 //     return zset_score(zset, uid, &score);
 // }
 
-int zsetpy_add(double score, char *puid, double newscore)
+int zsetpy_add(double score, char *puid)
 {
     char * uid = malloc(sizeof(char) * strlen(puid));
     uid = strcpy(uid, puid);
-    return zset_add(zset, score, uid, &newscore);
+    return zset_add(zset, score, uid);
 }
 
 unsigned long zsetpy_length()

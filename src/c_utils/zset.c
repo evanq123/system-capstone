@@ -60,7 +60,11 @@ bool zset_delete(ZSet *zs, char *uid) {
     return false;
 }
 
-zset_add(ZSet *zs, double score, char *uid, double *newscore) {
-
+bool zset_add(ZSet *zs, double score, char *uid) {
+    if(hashtable_contains_key(uid))
+        // uid are unique.
+        return false;
+    
+    
 }
 

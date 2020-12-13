@@ -117,7 +117,7 @@ class ZSet(SortedSet):
 
         #zset_add
         self._zset.zsetpy_add.restype = c_int
-        self._zset.zsetpy_add.argtypes = [c_double, c_char_p, c_double]
+        self._zset.zsetpy_add.argtypes = [c_double, c_char_p]
 
         #zset_length
         self._zset.zsetpy_length.restype = c_ulong
@@ -142,11 +142,9 @@ class ZSet(SortedSet):
         # print(repr(item_arr.raw))
         return self._zset.zsetpy_delete(item_arr)
 
-    def add(self, item, score, newscore=None):
+    def add(self, item, score):
         item_arr = create_string_buffer(item.encode(), len(item))
-        if newscore is not None:
-            return self._zset.zsetpy_add(score, item_arr, newscore)
-        return self._zset.zsetpy_add(score, item_arr, score)
+        return self._zset.zsetpy_add(score, item_arr)
 
     def subset(self, start, end, include_start=True, include_end=True):
         # pointer of bytes
