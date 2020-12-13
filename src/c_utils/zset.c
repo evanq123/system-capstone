@@ -84,8 +84,12 @@ char ** zset_range(ZSet *zs, rangespec *range) {
         ln = ln->level[0].forward; // forward == null if no more elems.
     }
 
-    char ** retval = array_get_buffer(results);
-    // TODO possibly need to trim length of retval
-
+    char ** buffer = array_get_buffer(results);
+    char ** retval = malloc(sizeof(char *) * array_size(results));
+    // Trim length of retval and copy
+    for (int i = 0; i < array_size(results); i++) {
+        retval[i] = buffer[i];
+    }
+    array_destroy(results); // Frees Array struct but not data.
     return retval;
 }
