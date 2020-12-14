@@ -20,6 +20,6 @@ unsigned long zset_length(ZSet *zs);
 bool zset_add(ZSet *zs, double score, char *uid);
 // long zset_rank(ZSet *zs, char *uid, bool reverse);
 bool zset_delete(ZSet *zs, char *uid);
-char ** zset_range(ZSet *zs, rangespec *range);
+Array * zset_range(ZSet *zs, rangespec *range);
 
 #endif

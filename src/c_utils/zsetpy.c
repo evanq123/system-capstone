@@ -50,8 +50,17 @@ char ** zsetpy_range(double min, double max, bool minex, bool maxex)
     range->minex = minex;
     range->maxex = maxex;
 
-    char ** uids = zset_range(zset, range);
+    Array * results = zset_range(zset, range);
     free(range);
+
+    char ** buffer = (char **)array_get_buffer(results);
+    char ** uids = malloc(sizeof(char *) * array_size(results));
+    // Trim length of retval and copy
+    for (int i = 0; i < array_size(results); i++) {
+        uids[i] = buffer[i];
+    }
+    array_destroy(results); // Frees Array struct but not data.
+    
     // TODO, uids are not free'd since it is sent to python.
     // might cause memory leak, but we'll see.
     return uids; 

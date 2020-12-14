@@ -39,16 +39,17 @@ unsigned long zset_length(ZSet *zs) {
 } 
 
 bool zset_delete(ZSet *zs, char *uid) {
-    double score;
-    enum cc_stat status = hashtable_remove(zs->map, uid, (void *)&score);
+    double * scoreptr = malloc(sizeof(double));
+    enum cc_stat status = hashtable_remove(zs->map, uid, (void *)&scoreptr);
     if (status == CC_OK) {
+        double score = scoreptr[0];
         bool slretval = skip_list_delete(zs->sl, score, uid, NULL);
         // Possible error: found in hashmap but not in skiplist.
         // TODO Log this?
-        if (slretval) {
+        if (!slretval) {
             fprintf(stderr, "Found %s in hashmap but not in skiplist.\n", uid);
         } 
-        return true;
+        return slretval;
     }
     return false;
 }
@@ -59,7 +60,9 @@ bool zset_add(ZSet *zs, double score, char *uid) {
         return false;
     
     // map uid -> score
-    enum cc_stat status = hashtable_add(zs->map, uid, (void *)&score);
+    double * scoreptr = malloc(sizeof(double));
+    scoreptr[0] = score;
+    enum cc_stat status = hashtable_add(zs->map, uid, (void *)scoreptr);
     if (status != CC_OK)
         // could not add to hashmap
         return false;
@@ -67,7 +70,7 @@ bool zset_add(ZSet *zs, double score, char *uid) {
     return skip_list_insert(zs->sl, score, uid);
 }
 
-char ** zset_range(ZSet *zs, rangespec *range) {
+Array * zset_range(ZSet *zs, rangespec *range) {
     Array * results;
     enum cc_stat status = array_new(&results);
     if (status != CC_OK) {
@@ -89,13 +92,6 @@ char ** zset_range(ZSet *zs, rangespec *range) {
         array_add(results, ln->uid);
         ln = ln->level[0].forward; // forward == null if no more elems.
     }
-
-    char ** buffer = (char **)array_get_buffer(results);
-    char ** retval = malloc(sizeof(char *) * array_size(results));
-    // Trim length of retval and copy
-    for (int i = 0; i < array_size(results); i++) {
-        retval[i] = buffer[i];
-    }
-    array_destroy(results); // Frees Array struct but not data.
-    return retval;
+    
+    return results;
 }

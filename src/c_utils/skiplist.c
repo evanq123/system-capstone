@@ -38,8 +38,6 @@ SkipListNode * skip_list_node_new(int level, double score, char * uid)
 void skip_list_node_free(SkipListNode * node)
 {
     // list_destroy(node->uids);
-    if (node->uid != NULL)
-        free(node->uid);
     free(node);
 }
 
@@ -111,6 +109,7 @@ SkipListNode * skip_list_insert(SkipList *sl, double score, char* uid)
     // move n to insertion location.
     SkipListNode * n = sl->head;
     unsigned int rank[SKIPLIST_MAXLEVEL];
+    SkipListNode * update[SKIPLIST_MAXLEVEL];
     for (int i = sl->level - 1; i >= 0; i--)
     {
         rank[i] = (i == (sl->level - 1)) ? 0 : rank[i + 1];
@@ -122,10 +121,11 @@ SkipListNode * skip_list_insert(SkipList *sl, double score, char* uid)
             rank[i] += n->level[i].span;
             n = n->level[i].forward;
         }
+        update[i] = n;
     }
     
     // preparing to add n.
-    SkipListNode * update[SKIPLIST_MAXLEVEL];
+    
     int level = skip_list_random_level();
     n = skip_list_node_new(level, score, uid);
     if(level > sl->level) {
@@ -191,7 +191,7 @@ bool skip_list_delete(SkipList *sl, double score, char *uid, SkipListNode **node
     int i;
 
     x = sl->head;
-    for(i = sl->level - 1; i >= 0; i++) {
+    for(i = sl->level - 1; i >= 0; i--) {
         while(x->level[i].forward &&
             (x->level[i].forward->score < score || 
                 (x->level[i].forward->score == score &&

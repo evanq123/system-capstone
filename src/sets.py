@@ -146,9 +146,9 @@ class ZSet(SortedSet):
         item_arr = create_string_buffer(item.encode(), len(item))
         return self._zset.zsetpy_add(score, item_arr)
 
-    def subset(self, start, end, include_start=True, include_end=True):
+    def subset(self, start, end, exclude_start=False, exclude_end=False):
         # pointer of bytes
-        ptrs = self._zset.zsetpy_range(start, end, include_start, include_end)
+        ptrs = self._zset.zsetpy_range(start, end, exclude_start, exclude_end)
         res = []
         for b in ptrs:
             if b is None:
