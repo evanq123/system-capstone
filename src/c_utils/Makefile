@@ -1,8 +1,9 @@
 zsetpy:
 	gcc -c -Wall -Werror -fpic *.c *.h
-	gcc -shared -o zsetpy.so zsetpy.o
+	ld -r *.o -o final.o 
+	gcc -shared -o zsetpy.so final.o
 	mv zsetpy.so ..
 
 clean:
-	rm *.o *.gch
+	rm *.o *.gch *a
 
