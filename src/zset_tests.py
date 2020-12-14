@@ -10,5 +10,3 @@ zset.add("second", 1)
 print(zset.size())
 
 print(zset.subset(0, 1))
-
-zset.subset()

@@ -46,9 +46,9 @@ bool zset_delete(ZSet *zs, char *uid) {
         bool slretval = skip_list_delete(zs->sl, score, uid, NULL);
         // Possible error: found in hashmap but not in skiplist.
         // TODO Log this?
-        if (!slretval) {
-            fprintf(stderr, "Found %s in hashmap but not in skiplist.\n", uid);
-        } 
+        // if (!slretval) {
+        //     fprintf(stderr, "Found %s in hashmap but not in skiplist.\n", uid);
+        // } 
         return slretval;
     }
     return false;

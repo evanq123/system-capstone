@@ -133,7 +133,7 @@ class ZSet(SortedSet):
 
         #zset_range
         self._zset.zsetpy_range.restype = POINTER(c_char_p)
-        self._zset.zsetpy_range.argtypes = [c_double, c_double, c_bool, c_bool]
+        self._zset.zsetpy_range.argtypes = [c_double, c_double, POINTER(c_double), c_bool, c_bool]
 
     def remove(self, item):
         # TODO Needed to create buffer for item, possible issue may arise?
@@ -147,13 +147,19 @@ class ZSet(SortedSet):
         return self._zset.zsetpy_add(score, item_arr)
 
     def subset(self, start, end, exclude_start=False, exclude_end=False):
+        
+        replylen = c_double()
+        ptrs = self._zset.zsetpy_range(start, end, byref(replylen), exclude_start, exclude_end)
         # pointer of bytes
-        ptrs = self._zset.zsetpy_range(start, end, exclude_start, exclude_end)
+        # print(replylen.value)
         res = []
+        i = 0
         for b in ptrs:
-            if b is None:
-                break
+            # print(b.decode(), i)
             res.append(b.decode())
+            i += 1
+            if i == int(replylen.value):
+                break
 
         return res
     

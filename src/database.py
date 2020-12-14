@@ -129,7 +129,7 @@ class KVStore:
         # TODO store into to redis
         self.store = defaultdict(list)
         # TODO store into ZSet
-        self.sets = defaultdict(SList)
+        self.sets = defaultdict(ZSet)
 
     @benchmark_function("kvstore")
     def get(self, key):
