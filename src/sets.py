@@ -112,28 +112,28 @@ class ZSet(SortedSet):
         self._zset.zsetpy_init.argtypes = None
 
         #zset_score
-        self._zset.zsetpy_score.restype = c_int
-        self._zset.zsetpy_score.argtypes = [c_char_p, c_double]
+        # self._zset.zsetpy_score.restype = c_int
+        # self._zset.zsetpy_score.argtypes = [c_char_p, c_double]
 
         #zset_add
-        self._zset.zsetpy_add.restype = c_int
-        self._zset.zsetpy_add.argtypes = [c_double, c_char_p, c_double]
+        self._zset.zsetpy_add.restype = c_bool
+        self._zset.zsetpy_add.argtypes = [c_double, c_char_p]
 
         #zset_length
         self._zset.zsetpy_length.restype = c_ulong
         self._zset.zsetpy_length.argtypes = None
 
         #zset_rank
-        self._zset.zsetpy_rank.restype = c_int
-        self._zset.zsetpy_rank.argtypes = [c_char_p, c_bool]
+        # self._zset.zsetpy_rank.restype = c_int
+        # self._zset.zsetpy_rank.argtypes = [c_char_p, c_bool]
 
-        #zset_length
-        self._zset.zsetpy_delete.restype = c_int
+        #zset_delete
+        self._zset.zsetpy_delete.restype = c_bool
         self._zset.zsetpy_delete.argtypes = [c_char_p]
 
         #zset_range
         self._zset.zsetpy_range.restype = POINTER(c_char_p)
-        self._zset.zsetpy_range.argtypes = [c_double, c_double, c_bool, c_bool]
+        self._zset.zsetpy_range.argtypes = [c_double, c_double, POINTER(c_double), c_bool, c_bool]
 
     def remove(self, item):
         # TODO Needed to create buffer for item, possible issue may arise?
@@ -142,20 +142,24 @@ class ZSet(SortedSet):
         # print(repr(item_arr.raw))
         return self._zset.zsetpy_delete(item_arr)
 
-    def add(self, item, score, newscore=None):
+    def add(self, item, score):
         item_arr = create_string_buffer(item.encode(), len(item))
-        if newscore is not None:
-            return self._zset.zsetpy_add(score, item_arr, newscore)
-        return self._zset.zsetpy_add(score, item_arr, score)
+        return self._zset.zsetpy_add(score, item_arr)
 
-    def subset(self, start, end, include_start=True, include_end=True):
+    def subset(self, start, end, exclude_start=False, exclude_end=False):
+        
+        replylen = c_double()
+        ptrs = self._zset.zsetpy_range(start, end, byref(replylen), exclude_start, exclude_end)
         # pointer of bytes
-        ptrs = self._zset.zsetpy_range(start, end, include_start, include_end)
+        # print(replylen.value)
         res = []
+        i = 0
         for b in ptrs:
-            if b is None:
-                break
+            # print(b.decode(), i)
             res.append(b.decode())
+            i += 1
+            if i == int(replylen.value):
+                break
 
         return res
     

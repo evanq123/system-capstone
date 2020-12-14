@@ -1,10 +1,11 @@
-zsetpy_test:
-	gcc -c -Wall -Werror -fpic zsetpy_test.c
-	gcc -shared -o zsetpy.so zsetpy_test.o
-	mv zsetpy.so ..
-
-
 zsetpy:
 	gcc -c -Wall -Werror -fpic *.c *.h
-	gcc -shared -o zsetpy.so zsetpy.o
+	ld -r *.o -o final.o 
+	gcc -shared -o zsetpy.so final.o
 	mv zsetpy.so ..
+
+clean:
+	rm *.o *.gch *a driver
+
+driver:
+	gcc -g -Wall -Werror *.c *.h -o driver
