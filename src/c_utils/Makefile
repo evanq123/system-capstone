@@ -5,5 +5,7 @@ zsetpy:
 	mv zsetpy.so ..
 
 clean:
-	rm *.o *.gch *a
+	rm *.o *.gch *a driver
 
+driver:
+	gcc -g -Wall -Werror *.c *.h -o driver

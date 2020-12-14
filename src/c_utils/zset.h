@@ -1,7 +1,8 @@
 #ifndef __ZSET_H
 #define __ZSET_H
 
-#include <collectc/hashtable.h>
+#include "hashtable.h"
+#include "array.h"
 
 #include <stdbool.h>
 

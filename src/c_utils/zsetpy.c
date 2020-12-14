@@ -1,6 +1,7 @@
 #include "zset.h"
 
 #include <string.h>
+#include <stdio.h>
 
 static ZSet * zset;
 
@@ -20,6 +21,7 @@ int zsetpy_add(double score, char *puid)
 {
     char * uid = malloc(sizeof(char) * strlen(puid));
     uid = strcpy(uid, puid);
+    
     return zset_add(zset, score, uid);
 }
 
