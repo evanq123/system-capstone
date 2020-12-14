@@ -17,10 +17,10 @@ void zsetpy_init(void)
 //     return zset_score(zset, uid, &score);
 // }
 
-int zsetpy_add(double score, char *puid)
+int zsetpy_add(double score, char *puid, size_t size)
 {
-    char * uid = malloc(sizeof(char) * strlen(puid));
-    uid = strcpy(uid, puid);
+    char * uid = calloc(sizeof(char), size + 1);
+    uid = strncpy(uid, puid, size);
     
     return zset_add(zset, score, uid);
 }
@@ -36,9 +36,9 @@ unsigned long zsetpy_length()
 //     return zset_rank(zset, uid, reverse);
 // }
 
-int zsetpy_delete(char* puid) {
-    char * uid = malloc(sizeof(char) * strlen(puid));
-    uid = strcpy(uid, puid);
+int zsetpy_delete(char* puid, size_t size) {
+    char * uid = calloc(sizeof(char), size + 1);
+    uid = strncpy(uid, puid, size);
     return zset_delete(zset, uid);
 }
 

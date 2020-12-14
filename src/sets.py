@@ -117,7 +117,7 @@ class ZSet(SortedSet):
 
         #zset_add
         self._zset.zsetpy_add.restype = c_bool
-        self._zset.zsetpy_add.argtypes = [c_double, c_char_p]
+        self._zset.zsetpy_add.argtypes = [c_double, c_char_p, c_size_t]
 
         #zset_length
         self._zset.zsetpy_length.restype = c_ulong
@@ -129,7 +129,7 @@ class ZSet(SortedSet):
 
         #zset_delete
         self._zset.zsetpy_delete.restype = c_bool
-        self._zset.zsetpy_delete.argtypes = [c_char_p]
+        self._zset.zsetpy_delete.argtypes = [c_char_p, c_size_t]
 
         #zset_range
         self._zset.zsetpy_range.restype = POINTER(c_char_p)
@@ -138,24 +138,26 @@ class ZSet(SortedSet):
     def remove(self, item):
         # TODO Needed to create buffer for item, possible issue may arise?
         # esp. with non null characters in string buffer.
-        item_arr = create_string_buffer(item.encode(), len(item))
+        # print(str(item).encode())
+        item_arr = create_string_buffer(str(item).encode("utf-8"), len(item))
         # print(repr(item_arr.raw))
-        return self._zset.zsetpy_delete(item_arr)
+        return self._zset.zsetpy_delete(item_arr, len(item))
 
     def add(self, item, score):
-        item_arr = create_string_buffer(item.encode(), len(item))
-        return self._zset.zsetpy_add(score, item_arr)
+        item_arr = create_string_buffer(str(item).encode("utf-8"), len(item))
+        return self._zset.zsetpy_add(score, item_arr, len(item))
 
     def subset(self, start, end, exclude_start=False, exclude_end=False):
-        
         replylen = c_double()
         ptrs = self._zset.zsetpy_range(start, end, byref(replylen), exclude_start, exclude_end)
         # pointer of bytes
         # print(replylen.value)
         res = []
         i = 0
+        # print(ptrs)
         for b in ptrs:
-            # print(b.decode(), i)
+            # print(b, i)
+            # print(b.decode())
             res.append(b.decode())
             i += 1
             if i == int(replylen.value):
