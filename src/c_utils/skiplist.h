@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 /* Skip List */
 #define SKIPLIST_MAXLEVEL 32    /* will be enough for 2^64 elements */

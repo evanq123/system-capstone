@@ -48,8 +48,9 @@ char ** zsetpy_range(double min, double max, bool minex, bool maxex)
     range->minex = minex;
     range->maxex = maxex;
 
-    char ** uids = zset_range(zset, &range);
+    char ** uids = zset_range(zset, range);
     free(range);
-
-    return uids;
+    // TODO, uids are not free'd since it is sent to python.
+    // might cause memory leak, but we'll see.
+    return uids; 
 }

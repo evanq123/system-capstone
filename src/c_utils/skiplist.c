@@ -207,7 +207,7 @@ bool skip_list_delete(SkipList *sl, double score, char *uid, SkipListNode **node
         // TODO delete node
         skip_list_delete_node(sl, x, update);
         if (!node)
-            skip_list_node_free(node);
+            skip_list_node_free(x);
         else
             *node = x;
         return true;
