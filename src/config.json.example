@@ -1,4 +1,4 @@
-// Input all the values then rename file to config.ini and delete this comment
+// Input all the values then rename file to config.json and delete this comment
 {
     "DATABASE": {
         "HOST": "...",
