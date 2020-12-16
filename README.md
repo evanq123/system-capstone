@@ -19,7 +19,7 @@ To run tests locally before pushing, run `make test` on macOS or Linux, or run e
 
 Install the necessary dependencies: MySQL, C, gcc, Make, Python3, Tweepy.
 
-1. Create a `config.json` in the src directory by making a copy of the provided template and filling in the API keys.
+1. Create a `config.json` in the src directory by making a copy of the provided template and filling in the API keys and MySQL configuration.
 
 2. Goto `src/c_utils/` and run `make` to compile the C ZSet shared object.
 
