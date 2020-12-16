@@ -25,4 +25,4 @@ Install the necessary dependencies: MySQL, C, gcc, Make, Python3, Tweepy.
 
 3. Generate your dataset by running `data.py` or use the existing 6k data text file.
 
-4. Run `demo.py` or `frontend.py`.
+4. Run `demo.py` or `front_end.py`.
