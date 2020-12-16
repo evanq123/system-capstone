@@ -15,7 +15,7 @@ Any code pushed to this repository will automatically be subject to all existing
 
 To run tests locally before pushing, run `make test` on macOS or Linux, or run each command under `test` in `Makefile` separately on Windows. Running `make test` first builds a production-ready docker container with updated source files. Upon build completion, unit tests are ran.
 
-### Instructions
+### Execution Instructions
 
 Install the necessary dependencies: MySQL, C, gcc, Make, Python3, Tweepy.
 
